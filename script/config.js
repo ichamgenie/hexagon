@@ -4,13 +4,13 @@ var D = 32;
 
 function getWidth()
 {
-	return WIDTH;
+    return WIDTH;
 }
 function getHeight()
 {
-	return HEIGHT;
+    return HEIGHT;
 }
 function getD()
 {
-	return D;
+    return D;
 }

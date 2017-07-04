@@ -2,35 +2,35 @@
 <html>
 <body>
 
-<div id = "canvas-container">
+    <div id = "canvas-container">
+        
+        <script type="text/javascript" src="./script/config.js"></script>
+        
+        <canvas id="myCanvas" style="border:1px solid #c3c3c3;">
+            Your browser does not support the canvas element.
+        </canvas>
 
-	<script type="text/javascript" src="./script/config.js"></script>
-	
-	<canvas id="myCanvas" style="border:1px solid #c3c3c3;">
-		Your browser does not support the canvas element.
-	</canvas>
+        <script type="text/javascript" src="./script/draw.js"></script>
+    </div>
 
-	<script type="text/javascript" src="./script/draw.js"></script>
-</div>
-
-<div id = "input-container">
-	
-	Width:<br/>
-	<input id="text-width" type="text" name="width">
-	<br/>
-	Height:<br/>
-	<input id="text-height" type="text" name="height">
-	<br/>
-	D:<br/>
-	<input id="text-d" type="text" name="d">
-	<br/>
-	<br/>
-	<script type="text/javascript" src="./script/set-default-input.js"></script>
-	
-	<button id="submit-btn">Submit</button>
-	<script type="text/javascript" src="./script/change-size.js"></script>
-	
-</div>
+    <div id = "input-container">
+        
+        Width:<br/>
+        <input id="text-width" type="text" name="width">
+        <br/>
+        Height:<br/>
+        <input id="text-height" type="text" name="height">
+        <br/>
+        D:<br/>
+        <input id="text-d" type="text" name="d">
+        <br/>
+        <br/>
+        <script type="text/javascript" src="./script/set-default-input.js"></script>
+        
+        <button id="submit-btn">Submit</button>
+        <script type="text/javascript" src="./script/change-size.js"></script>
+        
+    </div>
 
 
 </body>
