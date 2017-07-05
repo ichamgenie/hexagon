@@ -1,5 +1,5 @@
-var WIDTH = 1200;
-var HEIGHT = 1024;
+var WIDTH = 600;
+var HEIGHT = 512;
 var D = 32;
 
 function getWidth()
