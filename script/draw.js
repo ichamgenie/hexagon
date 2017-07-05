@@ -41,7 +41,8 @@ function draw_parallel_lines(path, ang, d, width, height)
         while(y>0)
         {
             y = y-d;
-        }       
+        }
+        y = y + d;
         while(y<height)
         {
             draw_line(path, midX, y, 0, width, height);
