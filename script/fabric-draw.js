@@ -4,15 +4,21 @@ var H = 4;
 fabric.Object.prototype.transparentCorners = false;
 
 canvas.on('mouse:over', function(e) {
-    e.target.set({ fill: 'orange' });
-    console.log('mouse:over ' + e.target);
-    canvas.renderAll();
+    if(e.target instanceof fabric.Triangle)
+    {
+        e.target.set({ fill: 'orange' });
+        console.log('mouse:over ' + e.target);
+        canvas.renderAll();
+    }
 });
 
 canvas.on('mouse:out', function(e) {
-    e.target.set({ fill: 'pink' });
-    console.log('mouse:out ' + e.target);
-    canvas.renderAll();
+    if(e.target instanceof fabric.Triangle)
+    {
+        e.target.set({ fill: 'pink' });
+        console.log('mouse:out ' + e.target);
+        canvas.renderAll();
+    }
 });
 
 drawCanvas(canvas, getD());
