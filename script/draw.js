@@ -1,7 +1,5 @@
-var c=document.getElementById("myCanvas");
+var c=document.getElementById("c");
 
-c.width = getWidth();
-c.height = getHeight();
 
 draw_can(c, getD());
 

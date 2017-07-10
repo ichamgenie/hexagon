@@ -1,6 +1,13 @@
-var WIDTH = 600;
-var HEIGHT = 512;
-var D = 32;
+var WIDTH = 1024;
+var HEIGHT = 1024;
+var D = 64;
+
+var c=document.getElementById("c");
+
+c.width = getWidth();
+c.height = getHeight();
+
+var canvas = new fabric.Canvas('c');
 
 function getWidth()
 {
@@ -13,4 +20,8 @@ function getHeight()
 function getD()
 {
     return D;
+}
+function getCanvas()
+{
+    return canvas;
 }
