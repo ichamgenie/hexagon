@@ -1,24 +1,39 @@
 var canvas = getCanvas();
 var sqrt32 = Math.sqrt(3)/2;
 var H = 4;
+var taMap = new Map();
+var width = canvas.width;
+var height = canvas.height;
+var D = getD();
+
+var keyCatch = "";
+
 fabric.Object.prototype.transparentCorners = false;
 
-canvas.on('mouse:over', function(e) {
-    if(e.target instanceof fabric.Triangle)
+canvas.on('mouse:move', function(option) {
+    var taKey = calKey(option.e.offsetX, option.e.offsetY, width, height, D);
+    if(keyCatch == taKey)
     {
-        e.target.set({ fill: 'orange' });
-        console.log('mouse:over ' + e.target);
-        canvas.renderAll();
+        
     }
-});
-
-canvas.on('mouse:out', function(e) {
-    if(e.target instanceof fabric.Triangle)
+    else
     {
-        e.target.set({ fill: 'pink' });
-        console.log('mouse:out ' + e.target);
-        canvas.renderAll();
+        var currectTa = taMap.get(taKey);
+        var formerTa = taMap.get(keyCatch);
+        if(currectTa instanceof TriangleCell)
+        {
+            moveOn(currectTa);
+        }
+        if(formerTa instanceof TriangleCell)
+        {
+            moveOff(formerTa);
+        }
+        
+        console.log(taKey);
     }
+    
+    
+    keyCatch = taKey;
 });
 
 drawCanvas(canvas, getD());
@@ -28,13 +43,24 @@ function drawCanvas(canvas, d)
     drawTriangles(canvas, canvas.width, canvas.height, d, canvas.width/(d*2));
 }
 
+function moveOn(taCell)
+{
+    taCell.triangle.set({ fill: 'orange' });
+    canvas.renderAll();
+}
+
+function moveOff(taCell)
+{
+    taCell.triangle.set({ fill: 'pink' });
+    canvas.renderAll();
+}
+
 function drawTriangles(canvas, width, height, l, h)
 {
     var taHeight = l * sqrt32;
     var midX = width/2;
     var midY = height/2;
     
-    var triangeleList = [];
     for(var j=0;j<h;j++)
     {
         y = midY + j*taHeight;
@@ -42,16 +68,16 @@ function drawTriangles(canvas, width, height, l, h)
         for(var i=0;i<j;i++)
         {
             x = x0 + i*l;
-            triangeleList.push(new TriangleCell(canvas, x, y, l, 0));
-            triangeleList.push(new TriangleCell(canvas, x + l/2, y, l, 180));
+            taMap.set(getKey(x, y), new TriangleCell(canvas, x, y, l, 0));
+            taMap.set(getKey(x + l/2, y), new TriangleCell(canvas, x + l/2, y, l, 180));
         }
         x = x0 + j*l;
-        triangeleList.push(new TriangleCell(canvas, x , y, l, 0));
+        taMap.set(getKey(x, y), new TriangleCell(canvas, x , y, l, 0));
     }
     
-    for(var k=0;k<triangeleList.length;k++)
+    for(var ta of taMap)
     {
-        triangeleList[k].draw();
+        ta[1].draw();
     }
 }
 
@@ -81,11 +107,43 @@ function TriangleCell(canvas, x, y, l, a)
         this.taColor = "#cccccc";
     }
     
+    this.triangle = null;
     this.draw = draw;
     function draw()
     {
-        ta = new fabric.Triangle({ top: this.taTop, left: this.taLeft, width: this.taWidth, height: this.taHeight, angle: this.taAngle, fill: this.taColor });
-        canvas.add(ta);
+        this.triangle = new fabric.Triangle({ 
+            top: this.taTop, 
+            left: this.taLeft, 
+            width: this.taWidth, 
+            height: this.taHeight, 
+            angle: this.taAngle, 
+            fill: this.taColor,
+            selectable:false,
+            hoverCursor:"default"});
+        canvas.add(this.triangle);
     }
     
+}
+
+function getKey(x, y)
+{
+    return "" + Math.round(x) + "," + Math.round(y);
+}
+
+function calKey(x, y, width, height, L)
+{
+    var x0 = width/2;
+    var y0 = height/2;
+    var H = L*sqrt32;
+    
+    var l1 = y - y0;
+    var l2 = (y - y0)/2 - 0.75*(x - x0)/sqrt32;
+    var l3 = (y - y0)/2 + 0.75*(x - x0)/sqrt32;
+    
+    taY = y0 + Math.floor(l1/H)*H;
+    n2 = Math.floor(l2/H);
+    n3 = Math.floor(l3/H);
+    taX = x0 + (n3-n2)*L/2;
+    
+    return getKey(taX, taY);
 }
