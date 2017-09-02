@@ -22,11 +22,11 @@ canvas.on('mouse:move', function(option) {
         var formerTa = taMap.get(keyCatch);
         if(currectTa instanceof TriangleCell)
         {
-            moveOn(currectTa);
+            mouseOn(currectTa);
         }
         if(formerTa instanceof TriangleCell)
         {
-            moveOff(formerTa);
+            mouseOff(formerTa);
         }
         
         console.log(taKey);
@@ -43,13 +43,13 @@ function drawCanvas(canvas, d)
     drawTriangles(canvas, canvas.width, canvas.height, d, canvas.width/(d*2));
 }
 
-function moveOn(taCell)
+function mouseOn(taCell)
 {
     taCell.triangle.set({ fill: 'orange' });
     canvas.renderAll();
 }
 
-function moveOff(taCell)
+function mouseOff(taCell)
 {
     taCell.triangle.set({ fill: 'pink' });
     canvas.renderAll();
@@ -79,6 +79,11 @@ function drawTriangles(canvas, width, height, l, h)
     {
         ta[1].draw();
     }
+    
+    for(var ta of taMap)
+    {
+        ta[1].drawLines();
+    }
 }
 
 function TriangleCell(canvas, x, y, l, a)
@@ -92,12 +97,27 @@ function TriangleCell(canvas, x, y, l, a)
     this.taWidth = l;
     this.taHeight = l*sqrt32;
     
+    var lx1 = 0;
+    var ly1 = 0;
+    var lx2 = 0;
+    var ly2 = 0;
+    var lx3 = 0;
+    var ly3 = 0;
+    
+    
     if(a===180)
     {
         this.taTop = y+sqrt32*l+1;
         this.taLeft = x+l/2+1;
         this.taAngle = 180;
         this.taColor = "#dddddd";
+        
+        lx1 = l/2;
+        ly1 = this.taHeight;
+        lx2 = l;
+        ly2 = 0;
+        lx3 = 0;
+        ly3 = 0;
     }
     else
     {
@@ -105,10 +125,18 @@ function TriangleCell(canvas, x, y, l, a)
         this.taLeft = x-l/2;
         this.taAngle = 0;
         this.taColor = "#cccccc";
+        
+        lx1 = l/2;
+        ly1 = 0;
+        lx2 = l;
+        ly2 = this.taHeight;
+        lx3 = 0;
+        ly3 = this.taHeight;
     }
     
     this.triangle = null;
     this.draw = draw;
+    this.drawLines = drawLines;
     function draw()
     {
         this.triangle = new fabric.Triangle({ 
@@ -123,6 +151,36 @@ function TriangleCell(canvas, x, y, l, a)
         canvas.add(this.triangle);
     }
     
+    function drawLines()
+    {
+        this.line1 = new fabric.Line([lx1, ly1, lx2, ly2], 
+            {
+                top: y,
+                left: x,
+                stroke: "white",
+                selectable:false,
+                hoverCursor:"default"
+            });
+        this.line2 = new fabric.Line([lx2, ly2, lx3, ly3], 
+            {
+                top: y + ly2,
+                left: x - l/2,
+                stroke: "white",
+                selectable:false,
+                hoverCursor:"default"
+            });
+        this.line3 = new fabric.Line([lx3, ly3, lx1, ly1], 
+            {
+                top: y,
+                left: x - l/2,
+                stroke: "white",
+                selectable:false,
+                hoverCursor:"default"
+            });
+        canvas.add(this.line1);
+        canvas.add(this.line2);
+        canvas.add(this.line3);
+    }
 }
 
 function getKey(x, y)
